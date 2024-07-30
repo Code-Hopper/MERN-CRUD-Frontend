@@ -6,12 +6,19 @@ const CreateData = () => {
     let [formData, setFormData] = useState({
         name: "",
         phone: "",
+        email: "",
         city: "",
         age: "",
         address: "",
         pincode: "",
         dob: ""
     })
+
+    let [status, setStatus] = useState(false)
+
+    let [message, setMessage] = useState("")
+
+    let [messageColor, setMessageColor] = useState("")
 
     let handelChange = (e) => {
 
@@ -42,6 +49,20 @@ const CreateData = () => {
 
             console.log("your has been sent to backend for validation !")
 
+            if (result.status === 202) {
+                resetForm()
+                setStatus(true)
+                closePopUp()
+                setMessage(result.data.message)
+                setMessageColor("success")
+            } else {
+                resetForm()
+                setStatus(true)
+                closePopUp()
+                setMessage(result.data.message)
+                setMessageColor("danger")
+            }
+
         } catch (err) {
             console.log("unable to send data", err)
         }
@@ -53,6 +74,7 @@ const CreateData = () => {
         setFormData(
             {
                 name: "",
+                email: "",
                 phone: "",
                 city: "",
                 age: "",
@@ -64,67 +86,98 @@ const CreateData = () => {
 
     }
 
+    // pop up from backend
+
+    let closePopUp = () => {
+        setTimeout(() => {
+            setStatus(false)
+        }, 5000)
+    }
+
+    let CountNumber = (e) =>{
+        let value = e.target.value
+        if(value.length === 10){
+            // alert("they are good !")
+        }else{
+            // alert("less than 10 digits")
+            // submitBtn.disalbed
+        }
+    }
+
     return (
+        <>
+            <div>
 
-        <div>
+                <div className='container shadow-lg my-5 p-5'>
+                    <h1 className='py-2'>Data Entry Form</h1>
 
-            <div className='container shadow-lg my-5 p-5'>
-                <h1 className='py-2'>Data Entry Form</h1>
+                    <form onSubmit={handelSubmit}>
+                        <div className='d-flex flex-column gap-3'>
 
-                <form onSubmit={handelSubmit}>
-                    <div className='d-flex flex-column gap-3'>
-
-                        <div className="row">
-                            <div className="col">
-                                <input required onChange={handelChange} className='form-control' placeholder='Enter Name' type="text" name='name' value={formData.name} />
-                            </div>
-                            <div className="col">
-                                <input required onChange={handelChange} className='form-control' placeholder='Enter Phone' type="tel" name='phone' value={formData.phone} />
-                            </div>
-                        </div>
-
-                        <div className='row'>
-                            <div className="col">
-                                <input required onChange={handelChange} className='form-control' placeholder='Enter City' type="text" name='city' value={formData.city} />
-                            </div>
-                            <div className="col-8">
-                                <input required onChange={handelChange} className='form-control' placeholder='Enter Address' type="text" name='address' value={formData.address} />
-                            </div>
-                            <div className="col">
-                                <input required onChange={handelChange} className='form-control' type="number" placeholder='Enter Pincode' name='pincode' value={formData.pincode} />
-                            </div>
-                        </div>
-
-                        <div className='row'>
-                            <div className="col">
-                                <div className='row align-items-center'>
-                                    <div className="col">
-                                        <label htmlFor="job">Enter D.O.B.</label>
-                                    </div>
-                                    <div className="col-9">
-                                        <input required onChange={handelChange} className='form-control' placeholder='Enter ' type="date" name='dob' value={formData.dob} />
-                                    </div>
-
+                            <div className="row">
+                                <div className="col">
+                                    <input required onChange={handelChange} className='form-control' placeholder='Enter Name' type="text" name='name' value={formData.name} />
+                                </div>
+                                <div className="col">
+                                    <input required onChange={(e)=>{ handelChange(e) ; CountNumber(e) }} className='form-control' placeholder='Enter Phone' type="tel" name='phone' value={formData.phone} />
+                                </div>
+                                <div className="col">
+                                    <input required onChange={handelChange} className='form-control' placeholder='Enter Email' type="email" name='email' value={formData.email} />
                                 </div>
                             </div>
-                            <div className="col">
-                                {/* we will calculate it */}
-                                <input required onChange={handelChange} className='form-control' placeholder='Enter Age' type="number" name='age' value={formData.age} />
+
+                            <div className='row'>
+                                <div className="col">
+                                    <input required onChange={handelChange} className='form-control' placeholder='Enter City' type="text" name='city' value={formData.city} />
+                                </div>
+                                <div className="col-8">
+                                    <input required onChange={handelChange} className='form-control' placeholder='Enter Address' type="text" name='address' value={formData.address} />
+                                </div>
+                                <div className="col">
+                                    <input required onChange={handelChange} className='form-control' type="number" placeholder='Enter Pincode' name='pincode' value={formData.pincode} />
+                                </div>
                             </div>
+
+                            <div className='row'>
+                                <div className="col">
+                                    <div className='row align-items-center'>
+                                        <div className="col">
+                                            <label htmlFor="job">Enter D.O.B.</label>
+                                        </div>
+                                        <div className="col-9">
+                                            <input required onChange={handelChange} className='form-control' placeholder='Enter ' type="date" name='dob' value={formData.dob} />
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div className="col">
+                                    {/* we will calculate it */}
+                                    <input required onChange={handelChange} className='form-control' placeholder='Enter Age' type="number" name='age' value={formData.age} />
+                                </div>
+                            </div>
+
+                            <div className='d-flex justify-content-center gap-3'>
+                                <button type='submit' className='btn btn-success' id='submitBtn'>Submit</button>
+                                <button type='reset' onClick={resetForm} className='btn btn-danger'>Reset</button>
+                            </div>
+
                         </div>
 
-                        <div className='d-flex justify-content-center gap-3'>
-                            <button type='submit' className='btn btn-success'>Submit</button>
-                            <button type='reset' onClick={resetForm} className='btn btn-danger'>Reset</button>
-                        </div>
+                    </form>
 
-                    </div>
-
-                </form>
+                </div>
 
             </div>
 
-        </div>
+            {/* pop up */}
+
+            {
+                status ?
+                    <div className='mt-3 p-2 w-50 position-absolute start-50 top-0 z-3 translate-middle-x bg-light text-center text-dark shadow-lg'>
+                        <h4 className={`text-${messageColor}`}>{message}</h4>
+                    </div> : null
+            }
+        </>
     )
 }
 

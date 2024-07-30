@@ -30,13 +30,13 @@ const App = () => {
     }
 
     return (
-        <>
+        <div className="position-relative">
             <Header />
 
             <CreateData />
 
             <Footer />
-        </>
+        </div>
     )
 }
 
