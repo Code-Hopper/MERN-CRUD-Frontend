@@ -7,6 +7,7 @@ import "./style.css"
 import Header from './components/includes/Header.jsx'
 import Footer from './components/includes/Footer.jsx'
 import CreateData from './components/CreateData.jsx'
+import ReadData from './components/ReadData.jsx'
 
 // importing components
 
@@ -34,6 +35,8 @@ const App = () => {
             <Header />
 
             <CreateData />
+
+            <ReadData />
 
             <Footer />
         </div>
