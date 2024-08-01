@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { deleteData } from "./DeleteData.js"
 
 const ReadData = () => {
 
@@ -38,7 +39,9 @@ const ReadData = () => {
                 <td>{props.dob}</td>
                 <td>{props.age}</td>
                 <td>
-                    <button className='btn btn-danger me-2'>Delete</button>
+                    <button className='btn btn-danger me-2' onClick={()=>{
+                        deleteData(props.name,props._id)
+                    }}>Delete</button>
                     <button className='btn btn-primary'>Edit</button>
                 </td>
             </tr>
