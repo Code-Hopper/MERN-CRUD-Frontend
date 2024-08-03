@@ -6,6 +6,19 @@ const ReadData = () => {
 
     let [FetchedData, SetFetchedData] = useState(null)
 
+    let [editFi, setEditFi] = useState(true)
+
+    let [editedData, setEditedData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        city: "",
+        age: "",
+        address: "",
+        pincode: "",
+        dob: ""
+    })
+
     let fetchDataFromDatabase = async () => {
         try {
 
@@ -23,26 +36,59 @@ const ReadData = () => {
         }
     }
 
+    let handelEditChange = (e) => {
+        let { name, value } = e.target
+        console.log(name + " : " + value)
+        setEditedData((prev) => {
+
+            return (
+                { ...prev, [name]: value }
+            )
+
+        })
+    }
+
     useEffect(() => {
         fetchDataFromDatabase()
     }, [])
 
     let DisplayDataRow = (props) => {
+
         return (
             <tr className='' key={props._id}>
-                <td>{props.name}</td>
-                <td>{props.phone}</td>
-                <td>{props.email}</td>
-                <td>{props.city}</td>
-                <td>{props.pincode}</td>
-                <td>{props.address}</td>
-                <td>{props.dob}</td>
-                <td>{props.age}</td>
                 <td>
-                    <button className='btn btn-danger me-2' onClick={()=>{
-                        deleteData(props.name,props._id)
+                    <input onChange={handelEditChange} className='editFi form-control' type="text" name='name' value={editedData.name ? null : editedData.name = props.name} disabled={editFi} />
+                </td>
+                <td>
+                    <input onChange={handelEditChange} className='editFi form-control' type="text" name="phone" value={props.phone} disabled={editFi} />
+                </td>
+                <td>
+                    <input onChange={handelEditChange} className='editFi form-control' type="email" name="email" value={props.email} disabled={editFi} />
+                </td>
+                <td>
+                    <input onChange={handelEditChange} className='editFi form-control' type="text" name='city' value={props.city} disabled={editFi} />
+                </td>
+                <td>
+                    <input onChange={handelEditChange} className='editFi form-control' type="number" name='pincode' value={props.pincode} disabled={editFi} />
+
+                </td>
+                <td>
+                    <input onChange={handelEditChange} className='editFi form-control' type="text" name='address' value={props.address} disabled={editFi} />
+                </td>
+                <td>
+                    <input onChange={handelEditChange} className='editFi form-control' type="date" name='dob' value={props.dob} disabled={editFi} />
+                </td>
+                <td>
+                    <input onChange={handelEditChange} className='editFi form-control' type="number" name='age' value={props.age} disabled={editFi} />
+                </td>
+                <td>
+                    <button className='btn btn-danger me-2' onClick={() => {
+                        deleteData(props.name, props._id)
                     }}>Delete</button>
-                    <button className='btn btn-primary'>Edit</button>
+                    <button className='btn btn-primary' onClick={() => {
+                        setEditFi(!editFi)
+                    }}>Edit</button>
+                    {editFi ? null : <button className='btn btn-success'>Save</button>}
                 </td>
             </tr>
         )
@@ -52,6 +98,7 @@ const ReadData = () => {
 
         <>
             <div className='container'>
+
                 {
                     FetchedData ?
                         <table className='table table-border'>
