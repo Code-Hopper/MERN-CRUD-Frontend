@@ -14,6 +14,8 @@ const CreateData = () => {
         dob: ""
     })
 
+    let [canSubmit, SetCanSubmit] = useState(false)
+
     let [status, setStatus] = useState(false)
 
     let [message, setMessage] = useState("")
@@ -34,11 +36,14 @@ const CreateData = () => {
 
     }
 
+    let getAge = (e) => {
+        formData.age = new Date().getFullYear() - new Date(e.target.value).getFullYear()
+    }
+
     let handelSubmit = async (e) => {
         e.preventDefault()
         console.log(formData)
         // after getting from a objecct send it to backend !
-
         try {
 
             let result = await axios({
@@ -94,13 +99,12 @@ const CreateData = () => {
         }, 5000)
     }
 
-    let CountNumber = (e) =>{
+    let CountNumber = (e) => {
         let value = e.target.value
-        if(value.length === 10){
-            // alert("they are good !")
-        }else{
-            // alert("less than 10 digits")
-            // submitBtn.disalbed
+        if (value.length === 10) {
+            SetCanSubmit(true)
+        } else {
+            SetCanSubmit(false)
         }
     }
 
@@ -119,7 +123,7 @@ const CreateData = () => {
                                     <input required onChange={handelChange} className='form-control' placeholder='Enter Name' type="text" name='name' value={formData.name} />
                                 </div>
                                 <div className="col">
-                                    <input required onChange={(e)=>{ handelChange(e) ; CountNumber(e) }} className='form-control' placeholder='Enter Phone' type="tel" name='phone' value={formData.phone} />
+                                    <input required onChange={handelChange} onBlur={CountNumber} className='form-control' placeholder='Enter Phone (10 digits only)' type="tel" name='phone' value={formData.phone} />
                                 </div>
                                 <div className="col">
                                     <input required onChange={handelChange} className='form-control' placeholder='Enter Email' type="email" name='email' value={formData.email} />
@@ -145,19 +149,28 @@ const CreateData = () => {
                                             <label htmlFor="job">Enter D.O.B.</label>
                                         </div>
                                         <div className="col-9">
-                                            <input required onChange={handelChange} className='form-control' placeholder='Enter ' type="date" name='dob' value={formData.dob} />
+                                            <input required onChange={(e) => { handelChange(e); getAge(e) }} className='form-control' placeholder='Enter ' type="date" name='dob' value={formData.dob} />
                                         </div>
 
                                     </div>
                                 </div>
                                 <div className="col">
+
+                                    <div className='row align-items-center'>
+                                        <div className="col">
+                                            <label htmlFor="job">Your Age is : </label>
+                                        </div>
+                                        <div className="col-9">
+                                            <input required onChange={handelChange} className='form-control' placeholder='Enter Age' type="number" name='age' value={formData.age} disabled />
+                                        </div>
+                                    </div>
                                     {/* we will calculate it */}
-                                    <input required onChange={handelChange} className='form-control' placeholder='Enter Age' type="number" name='age' value={formData.age} />
+
                                 </div>
                             </div>
 
                             <div className='d-flex justify-content-center gap-3'>
-                                <button type='submit' className='btn btn-success' id='submitBtn'>Submit</button>
+                                <button type='submit' className='btn btn-success' id='submitBtn' disabled={!canSubmit}>Submit</button>
                                 <button type='reset' onClick={resetForm} className='btn btn-danger'>Reset</button>
                             </div>
 
