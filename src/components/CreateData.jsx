@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 
-const CreateData = () => {
+const CreateData = (props) => {
 
     let [formData, setFormData] = useState({
         name: "",
@@ -60,6 +60,8 @@ const CreateData = () => {
                 closePopUp()
                 setMessage(result.data.message)
                 setMessageColor("success")
+                // for live reload
+                props.call()
             } else {
                 resetForm()
                 setStatus(true)

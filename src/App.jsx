@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import axios from "axios"
 import "../node_modules/bootstrap/dist/css/bootstrap.css"
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
@@ -15,6 +15,8 @@ import ReadData from './components/ReadData.jsx'
 
 const App = () => {
 
+    let [load, setLoad] = useState(false)
+
     let CallBackEnd = async () => {
         try {
             let result = await axios({
@@ -30,13 +32,22 @@ const App = () => {
         }
     }
 
+    let callFromCreateData = () => {
+        setLoad(true)
+        // this to implement change in load data after 2 sec
+        setTimeout(() => {
+            setLoad(false)
+        }, 2000)
+
+    }
+
     return (
         <div className="position-relative">
             <Header />
 
-            <CreateData />
+            <CreateData call={callFromCreateData} />
 
-            <ReadData />
+            <ReadData isload={load} />
 
             <Footer />
         </div>

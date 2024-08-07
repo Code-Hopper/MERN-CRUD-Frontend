@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { deleteData } from "./DeleteData.js"
 
-const ReadData = () => {
+const ReadData = (props) => {
 
     let [FetchedData, SetFetchedData] = useState(null)
 
@@ -11,6 +11,9 @@ const ReadData = () => {
     let [editData, setEditData] = useState(null)
 
     let fetchDataFromDatabase = async () => {
+
+        // alert("called  fetch data!")
+
         try {
 
             let result = await axios({
@@ -26,6 +29,20 @@ const ReadData = () => {
 
         }
     }
+
+    let callFetchDataFunction = () => {
+
+        // alert("im from read data !")
+
+        if (props.isload) {
+            fetchDataFromDatabase();
+        }
+    }
+
+    useEffect(() => {
+        callFetchDataFunction();
+    }, [props.isload])
+
 
     useEffect(() => {
         fetchDataFromDatabase()
@@ -48,6 +65,7 @@ const ReadData = () => {
                 <td>
                     <button className='btn btn-danger me-2' onClick={() => {
                         deleteData(props.name, props._id)
+                        callFetchDataFunction()
                     }}>Delete</button>
                     <button className='btn btn-primary'
                         onClick={() => {
@@ -92,7 +110,7 @@ const ReadData = () => {
                     </div>
                     <div className="col d-flex gap-3">
                         <button type='submit' className='btn btn-success'>Save</button>
-                        <button type='button' className='btn btn-danger' onClick={() => SetOpenEdit(false) }>Cancel</button>
+                        <button type='button' className='btn btn-danger' onClick={() => SetOpenEdit(false)}>Cancel</button>
                     </div>
                 </div>
             </div>
@@ -102,20 +120,20 @@ const ReadData = () => {
     return (
 
         <>
-            <div style={{maxHeight:"300px", overflowY:"scroll"}} className='container'>
+            <div style={{ maxHeight: "300px", overflowY: "scroll" }} className='container'>
                 {
                     FetchedData ?
                         <table className='table table-border'>
                             <thead>
                                 <tr className='table-dark'>
-                                    <th>name</th>
-                                    <th>phone</th>
-                                    <th>email</th>
-                                    <th>city</th>
-                                    <th>pincode</th>
-                                    <th>address</th>
-                                    <th>dob</th>
-                                    <th>age</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>City</th>
+                                    <th>Pincode</th>
+                                    <th>Address</th>
+                                    <th>Dob</th>
+                                    <th>Age</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
